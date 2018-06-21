@@ -2,14 +2,15 @@ import os
 from subprocess import call
 import sys
 
-if __name__ == "__main__":
-    print sys.argv[1]
-    message = ""
+def get_commit_message():
+    commit_message = ""
     for i in range(1,len(sys.argv)):
-        print sys.argv[i]
-        message += sys.argv[i]
-        message += " "
+        commit_message += sys.argv[i]
+        commit_message += " "
+    return commit_message
 
-    result = 'git add . && git commit -m "' + message + '" && git push'
-    print("Running: " + result)
-    os.system(result) 
+if __name__ == "__main__":
+
+    query = 'git add . && git commit -m "' + get_commit_message() + '" && git push'
+    print("Running: " + query)
+    os.system(query) 
