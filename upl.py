@@ -8,5 +8,8 @@ if __name__ == "__main__":
     for i in range(1,len(sys.argv)):
         print sys.argv[i]
         message += sys.argv[i]
-    print message
-    os.system('git add . && git commit -m "added more python exercises" && git push') 
+        message += " "
+
+    result = 'git add . && git commit -m "' + message + '" && git push'
+    print("Running: " + result)
+    os.system(result) 
