@@ -1,5 +1,4 @@
-import logging
-logging.basicConfig(filename='test.log', level=logging.DEBUG,format='%(asctime)s:%(levelname)s:%(message)s')
+import unittest
 
 class Team:
     def __init__(self,company,employees):
@@ -54,33 +53,38 @@ class Intern(Employee):
         else:
             Employee.apply_raise(self)
 
-    
-emp1 = Employee("Google","Bryan",90000)
-intern1 = Intern("Google","Ivan")
+class TeamTest(unittest.TestCase):
+    def setUp(self):  
+        self.emp1 = Employee("Google","Bryan",90000)
+        self.intern1 = Intern("Google","Ivan")
 
-employees = []
-employees.append(emp1)
-employees.append(intern1)
+        self.employees = []
 
-team = Team("Google",employees)
-team.hire_employee(emp1)
-print(team.total_salaries())
+        self.employees.append(self.emp1)
+        self.employees.append(self.intern1)
 
-team.fire_employee(Employee("Google","Bryan",90000))
+        self.team1 = Team("Google",self.employees)
+        self.team2 = Team("Google",self.employees)
+        self.team3 = Team("Google",[self.emp1])
 
-team.print_employees()
-print(team.total_salaries())
+    def test_create_same_objects(self):
+        self.assertEqual(self.team1.company, self.team2.company)  
+        self.assertEqual(self.team1.employees, self.team2.employees)  
 
-# print(emp1.employee_mail())
-# print(emp1.name)
-# print(emp1.pay)
-# emp1.apply_raise()
-# print(emp1.pay)
+    def test_hireing_employees(self):
+        self.team3.hire_employee(self.intern1)
+        self.assertEqual(self.team1.company, self.team3.company)  
+        self.assertEqual(self.team1.employees, self.team3.employees)  
+ 
+    def test_firing_employees(self):
+        self.team1.fire_employee(self.intern1)
+        self.assertEqual(self.team1.company, self.team3.company)  
+        self.assertEqual(self.team1.employees, self.team3.employees)  
+ 
+    def test_empty_team(self):
+        empl = []
+        t = Team("Google",empl)
+        self.assertEqual(0, t.total_salaries())  
 
-# print(intern1.employee_mail())
-# print(intern1.name)
-# print(intern1.pay)
-# intern1.apply_raise()
-# intern1.apply_raise()
-# print(intern1.pay)
-
+if __name__ == '__main__':
+    unittest.main()
